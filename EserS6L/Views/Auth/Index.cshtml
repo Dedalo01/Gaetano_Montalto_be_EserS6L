@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+@model EserS6L.Models.Admin
+
+<h2>Benvenuto</h2>
+<p>Prego, inserisci le tue credenziali qui:</p>
+
+@using (Html.BeginForm())
+{
+    @Html.LabelFor(model => model.Username)
+    @Html.EditorFor(model => model.Username)
+
+    @Html.LabelFor(model => model.Password)
+    @Html.EditorFor(model => model.Password)
+
+    <button>Login to Admin Page</button>
+}
+
+
+

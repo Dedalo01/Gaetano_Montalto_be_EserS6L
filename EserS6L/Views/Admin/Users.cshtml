@@ -1,0 +1,119 @@
+﻿
+@{
+    ViewBag.Title = "Users";
+}
+
+<h2>Tabella degli Utenti</h2>
+
+
+<!-- TABELLA PRIVATI -->
+<h3>Tabella Privati</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nome</th>
+            <th>Cognome</th>
+            <th>Email</th>
+            <th>Codice Fiscale</th>
+            <th>Tipo Cliente</th>
+            <th>Aggiungi Spedizione</th>
+
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var utente in Model)
+        {
+            if (utente.TipoCliente == "Privato")
+            {
+                <tr>
+                    <td>@utente.Id</td>
+                    <td>@utente.Nome</td>
+                    <td>@utente.Cognome</td>
+                    <td>@utente.Email</td>
+                    <td>@utente.CodiceFiscale</td>
+                    <td>@utente.TipoCliente</td>
+                    <td>
+                        <form method="post" action="@Url.Action("Users", "Admin")">
+                            <input type="hidden" name="utenteId" value="@utente.Id" />
+                            <button type="submit">Aggiungi</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<!-- TABELLA AZIENDE -->
+<h3 class="mt-4">Tabella Aziende</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Partita Iva</th>
+            <th>Tipo Cliente</th>
+            <th>Aggiungi Spedizione</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var utente in Model)
+        {
+            if (utente.TipoCliente == "Azienda")
+            {
+                <tr>
+                    <td>@utente.Id</td>
+                    <td>@utente.Nome</td>
+                    <td>@utente.Email</td>
+                    <td>@utente.PartitaIva</td>
+                    <td>@utente.TipoCliente</td>
+                    <td>
+                        <form method="post" action="@Url.Action("Users", "Admin")">
+                            <input type="hidden" name="utenteId" value="@utente.Id" />
+                            <button type="submit">Aggiungi</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+
+
+@*<table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nome</th>
+                <th>Cognome</th>
+                <th>Email</th>
+                <th>Codice Fiscale</th>
+                <th>Partita Iva</th>
+                <th>Tipo Cliente</th>
+                <th>Aggiungi Spedizione</th>
+
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach(var utente in Model)
+                {
+            <tr>
+                <td>@utente.Id</td>
+                <td>@utente.Nome</td>
+                <td>@utente.Cognome</td>
+                <td>@utente.Email</td>
+                <td>@utente.CodiceFiscale</td>
+                <td>@utente.PartitaIva</td>
+                <td>@utente.TipoCliente</td>
+                <td><button>Aggiungi</button></td>
+            </tr>
+                }
+        </tbody>
+    </table>*@

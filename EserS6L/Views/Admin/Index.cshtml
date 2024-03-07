@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+@model EserS6L.Models.Utente
+
+<h2>Benvenuto @User.Identity.Name</h2>
+
+<p>Registra un Privato o una Azienda:</p>
+<select name="user" id="user">
+    <option>Scegli una delle due opzioni</option>
+    <option value="Azienda">Azienda</option>
+    <option value="Privato">Privato</option>
+</select>
+
+@using (Html.BeginForm())
+{
+
+    <div id="commonParts" style="display:none;">
+        @Html.LabelFor(model => model.Email)
+        @Html.EditorFor(model => model.Email)
+
+
+        @Html.LabelFor(model => model.Nome)
+        @Html.EditorFor(model => model.Nome)
+        @Html.ValidationMessageFor(model => model.Nome)
+
+    </div>
+
+    <div id="aziendaForm" style="display:none;">
+        @Html.LabelFor(model => model.PartitaIva)
+        @Html.EditorFor(model => model.PartitaIva)
+
+        @Html.HiddenFor(model => model.TipoCliente, new { @id = "tipoClienteAzienda", @Value = "Azienda" })
+    </div>
+
+    <div id="privatoForm" style="display:none;">
+        @*@Html.LabelFor(model => model.Nome)
+        @Html.EditorFor(model => model.Nome)*@
+
+        @Html.LabelFor(model => model.Cognome)
+        @Html.EditorFor(model => model.Cognome)
+
+        @Html.LabelFor(model => model.CodiceFiscale)
+        @Html.EditorFor(model => model.CodiceFiscale)
+
+        @Html.HiddenFor(model => model.TipoCliente, new { @id = "tipoClientePrivato", @Value = "Privato" })
+    </div>
+
+
+
+    <button>Submit</button>
+}
+
+
+
+<!-- scripts -->
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('#user').change(function () {
+                var selectedOption = $(this).val();
+
+                // Nascondi tutti i form all'inizio
+                $('#aziendaForm :input').prop('disabled', true);
+                $('#privatoForm :input').prop('disabled', true);
+                $('#aziendaForm').hide();
+                $('#privatoForm').hide();
+                $('#commonParts').hide();
+
+                // Mostra il form corrispondente alla scelta
+                if (selectedOption === 'Azienda') {
+                    $('#aziendaForm :input').prop('disabled', false);
+                    $('#aziendaForm').show();
+                    $('#commonParts').show();
+                } else if (selectedOption === 'Privato') {
+                    $('#privatoForm :input').prop('disabled', false);
+                    $('#privatoForm').show();
+                    $('#commonParts').show();
+                }
+            });
+        });
+    </script>
+}

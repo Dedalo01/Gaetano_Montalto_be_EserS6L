@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "Delivery";
+    EserS6L.Models.Utente utente = ViewBag.Utente;
+}
+
+@model EserS6L.Models.Spedizione
+
+
+
+<h2>Inserisci i dati per creare una nuova spedizione</h2>
+<p>
+    Stai aggiungendo una nuova spedizione per l'utente con
+    <strong>@(utente.PartitaIva == "" ? "Codice Fiscale: " + utente.CodiceFiscale : "Partita Iva: " + utente.PartitaIva)</strong>
+</p>
+
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.ClienteId, new { Value = utente.Id })
+
+    @Html.LabelFor(model => model.DataSpedizione)
+    @Html.EditorFor(model => model.DataSpedizione, new { htmlAttributes = new { @type = "datetime-local" } })
+
+    @Html.LabelFor(model => model.Peso)
+    @Html.EditorFor(model => model.Peso)
+
+    @Html.LabelFor(model => model.CittaDestinataria)
+    @Html.EditorFor(model => model.CittaDestinataria)
+
+    @Html.LabelFor(model => model.Indirizzo)
+    @Html.EditorFor(model => model.Indirizzo)
+
+    @Html.LabelFor(model => model.NominativoDestinatario)
+    @Html.EditorFor(model => model.NominativoDestinatario)
+
+    @Html.LabelFor(model => model.CostoSpedizione)
+    @Html.EditorFor(model => model.CostoSpedizione)
+
+    @Html.LabelFor(model => model.DataConsegnaPrevista)
+    @Html.EditorFor(model => model.DataConsegnaPrevista, new { htmlAttributes = new { @type = "datetime-local" } })
+
+    <button>Crea Spedizione</button>
+
+}
+
+
+@if (TempData["IsSuccess"] != null && (bool)TempData["IsSuccess"])
+{
+   <div class="my-5 alert alert-success alert-dismissible fade show" role="alert">
+       <strong>Successo!</strong> La spedizione è stata aggiunta con successo.
+       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+   </div>
+}
+
+
+
