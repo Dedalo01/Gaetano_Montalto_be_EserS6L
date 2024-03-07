@@ -17,8 +17,6 @@ namespace EserS6L.Controllers
         }
 
 
-
-
         [HttpPost]
         public ActionResult Index(Utente utente)
         {
@@ -216,5 +214,95 @@ namespace EserS6L.Controllers
         {
             return View();
         }
+
+
+        [HttpPost]
+        public JsonResult GetTotalDeliveryByCity()
+        {
+            string connString = ConfigurationManager.ConnectionStrings["EserS6Conn"].ToString();
+            SqlConnection conn = new SqlConnection(connString);
+
+            string selectAllDeliveryByCityQuery = "SELECT NominativoDestinatario, COUNT(*) AS TotaleSpedizioni FROM Spedizioni GROUP BY NominativoDestinatario";
+
+            try
+            {
+                conn.Open();
+                SqlCommand selectCmd = new SqlCommand(selectAllDeliveryByCityQuery);
+                SqlDataReader reader = selectCmd.ExecuteReader();
+
+                // Lista per memorizzare i risultati
+                List<DeliveryData> results = new List<DeliveryData>();
+
+                // Leggi i dati dal reader e aggiungili alla lista
+                while (reader.Read())
+                {
+                    var resultItem = new DeliveryData
+                    {
+                        NominativoDestinatario = reader["NominativoDestinatario"].ToString(),
+                        TotaleSpedizioni = Convert.ToInt32(reader["TotaleSpedizioni"])
+                    };
+                    results.Add(resultItem);
+                }
+
+                // Restituisci i dati in formato JSON
+                return Json(results, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                // Log dell'errore per esaminarne i dettagli
+                Console.WriteLine(ex.Message);
+
+                // Restituisci un messaggio di errore generico
+                return Json("Error");
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+
+        //public JsonResult GetTotalDeliveryByCity()
+        //{
+        //    string connString = ConfigurationManager.ConnectionStrings["EserS6Conn"].ToString();
+        //    SqlConnection conn = new SqlConnection(connString);
+
+        //    string selectAllDeliveryByCityQuery = "SELECT NominativoDestinatario, COUNT(*) AS TotaleSpedizioni FROM Spedizioni GROUP BY NominativoDestinatario";
+
+        //    // Lista per memorizzare i risultati
+        //    List<object> results = new List<object>();
+        //    try
+        //    {
+        //        conn.Open();
+        //        SqlCommand selectCmd = new SqlCommand(selectAllDeliveryByCityQuery);
+        //        SqlDataReader reader = selectCmd.ExecuteReader();
+
+
+        //        // Leggi i dati dal reader e aggiungili alla lista
+        //        while (reader.Read())
+        //        {
+        //            var resultItem = new
+        //            {
+        //                NominativoDestinatario = reader["NominativoDestinatario"].ToString(),
+        //                TotaleSpedizioni = Convert.ToInt32(reader["TotaleSpedizioni"])
+        //            };
+        //            results.Add(resultItem);
+        //        }
+
+        //        // Restituisci i dati in formato JSON
+        //        return Json(results, JsonRequestBehavior.AllowGet);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Gestisci l'eccezione o restituisci un messaggio di errore
+        //        return Json("Error");
+        //    }
+        //    finally
+        //    {
+        //        conn.Close();
+        //    }
+
+        //}
+
     }
 }

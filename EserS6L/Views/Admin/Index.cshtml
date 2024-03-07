@@ -37,7 +37,7 @@
 
     <div id="privatoForm" style="display:none;">
         @*@Html.LabelFor(model => model.Nome)
-        @Html.EditorFor(model => model.Nome)*@
+            @Html.EditorFor(model => model.Nome)*@
 
         @Html.LabelFor(model => model.Cognome)
         @Html.EditorFor(model => model.Cognome)
@@ -53,33 +53,179 @@
     <button>Submit</button>
 }
 
+<table id="spedizioniTable" class="table">
+    <thead>
+        <tr>
+            <th>Nominativo Destinatario</th>
+            <th>Totale Spedizioni</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Il corpo della tabella verrà popolato dinamicamente con JavaScript -->
+    </tbody>
+</table>
+
+@section scripts {
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            // Effettua la chiamata AJAX solo quando la pagina è completamente caricata
+            fetch('@Url.Action("GetTotalDeliveryByCity", "Admin")')
+                .then(response => response.json())
+                .then(data => {
+                    // Popola la tabella con i dati ottenuti
+                    populateTable(data);
+                })
+                .catch(error => console.error(error));
+
+            // Altre tue operazioni al momento del caricamento del documento
+        });
+
+        // Funzione per popolare la tabella con i dati ottenuti dalla chiamata AJAX
+        function populateTable(data) {
+            var tableBody = document.getElementById('spedizioniTable').getElementsByTagName('tbody')[0];
+
+            // Pulisci il corpo della tabella
+            tableBody.innerHTML = '';
+
+            // Cicla attraverso i dati e aggiungi righe alla tabella
+            for (var i = 0; i < data.length; i++) {
+                var row = '<tr>' +
+                    '<td>' + data[i].NominativoDestinatario + '</td>' +
+                    '<td>' + data[i].TotaleSpedizioni + '</td>' +
+                    '</tr>';
+
+                tableBody.insertAdjacentHTML('beforeend', row);
+            }
+        }
+    </script>
+}
+
+
+@*@section scripts {
+        <script type="text/javascript">
+                $(document).ready(function () {
+                    $('#user').change(function () {
+                        var selectedOption = $(this).val();
+
+                        // Nascondi tutti i form all'inizio
+                        $('#aziendaForm :input').prop('disabled', true);
+                        $('#privatoForm :input').prop('disabled', true);
+                        $('#aziendaForm').hide();
+                        $('#privatoForm').hide();
+                        $('#commonParts').hide();
+
+                        // Mostra il form corrispondente alla scelta
+                        if (selectedOption === 'Azienda') {
+                            $('#aziendaForm :input').prop('disabled', false);
+                            $('#aziendaForm').show();
+                            $('#commonParts').show();
+                        } else if (selectedOption === 'Privato') {
+                            $('#privatoForm :input').prop('disabled', false);
+                            $('#privatoForm').show();
+                            $('#commonParts').show();
+                        }
+                    });
+
+                   // Effettua la chiamata AJAX solo quando la pagina è completamente caricata
+                    $.ajax({
+                        url: '@Url.Action("GetTotalDeliveryByCity", "Admin")',
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (data) {
+                            // Popola la tabella con i dati ottenuti
+                            populateTable(data);
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
+
+                    // Altre tue operazioni all'interno del document.ready
+                });
+
+                // Funzione per popolare la tabella con i dati ottenuti dalla chiamata AJAX
+                function populateTable(data) {
+                    var tableBody = $('#spedizioniTable tbody');
+
+                    // Pulisci il corpo della tabella
+                    tableBody.empty();
+
+                    // Cicla attraverso i dati e aggiungi righe alla tabella
+                    $.each(data, function (index, item) {
+                        var row = '<tr>' +
+                            '<td>' + item.NominativoDestinatario + '</td>' +
+                            '<td>' + item.TotaleSpedizioni + '</td>' +
+                            '</tr>';
+
+                        tableBody.append(row);
+                    });
+                }
+            </script>
+    }*@
 
 
 <!-- scripts -->
-@section scripts {
-    <script>
-        $(document).ready(function () {
-            $('#user').change(function () {
-                var selectedOption = $(this).val();
+@*@section scripts {
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#user').change(function () {
+                    var selectedOption = $(this).val();
 
-                // Nascondi tutti i form all'inizio
-                $('#aziendaForm :input').prop('disabled', true);
-                $('#privatoForm :input').prop('disabled', true);
-                $('#aziendaForm').hide();
-                $('#privatoForm').hide();
-                $('#commonParts').hide();
+                    // Nascondi tutti i form all'inizio
+                    $('#aziendaForm :input').prop('disabled', true);
+                    $('#privatoForm :input').prop('disabled', true);
+                    $('#aziendaForm').hide();
+                    $('#privatoForm').hide();
+                    $('#commonParts').hide();
 
-                // Mostra il form corrispondente alla scelta
-                if (selectedOption === 'Azienda') {
-                    $('#aziendaForm :input').prop('disabled', false);
-                    $('#aziendaForm').show();
-                    $('#commonParts').show();
-                } else if (selectedOption === 'Privato') {
-                    $('#privatoForm :input').prop('disabled', false);
-                    $('#privatoForm').show();
-                    $('#commonParts').show();
+                    // Mostra il form corrispondente alla scelta
+                    if (selectedOption === 'Azienda') {
+                        $('#aziendaForm :input').prop('disabled', false);
+                        $('#aziendaForm').show();
+                        $('#commonParts').show();
+                    } else if (selectedOption === 'Privato') {
+                        $('#privatoForm :input').prop('disabled', false);
+                        $('#privatoForm').show();
+                        $('#commonParts').show();
+                    }
+                });
+            });
+
+
+            $(document).ready(function () {
+            // Effettua la chiamata AJAX per ottenere i dati dal controller
+            $.ajax({
+                url: 'GetTotalDeliveryByCity',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Popola la tabella con i dati ottenuti
+                    populateTable(data);
+                },
+                error: function (error) {
+                    console.log(error);
                 }
             });
         });
-    </script>
-}
+
+        // Funzione per popolare la tabella con i dati ottenuti dalla chiamata AJAX
+        function populateTable(data) {
+            var tableBody = $('#spedizioniTable tbody');
+
+            // Pulisci il corpo della tabella
+            tableBody.empty();
+
+            // Cicla attraverso i dati e aggiungi righe alla tabella
+            $.each(data, function (index, item) {
+                var row = '<tr>' +
+                    '<td>' + item.NominativoDestinatario + '</td>' +
+                    '<td>' + item.TotaleSpedizioni + '</td>' +
+                    '</tr>';
+
+                tableBody.append(row);
+            });
+        }
+
+
+        </script>
+    }*@

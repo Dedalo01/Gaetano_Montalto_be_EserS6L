@@ -229,6 +229,7 @@
     </Compile>
     <Compile Include="Models\Admin.cs" />
     <Compile Include="Models\AggiornamentoSpedizione.cs" />
+    <Compile Include="Models\DeliveryData.cs" />
     <Compile Include="Models\Spedizione.cs" />
     <Compile Include="Models\Utente.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
